@@ -1,10 +1,9 @@
-import schedule
 from scrapper import find_linkedin_jobs
 from whatsapp_bot import send_group_message
-import time
 import random
 from dotenv import load_dotenv
 import os
+from flask import Flask, request
 
 WELCOME_PHRASES = [
     "ALOU ALOU MEU POVO",
@@ -40,7 +39,12 @@ Link de candidatura: {job['link']}
 
     print("Vagas enviadas")
 
-schedule.every(23).hours.do(get_jobs_and_send)
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+router = Flask(__name__)
+
+@router.route('/send-jobs', methods=['HEAD'])
+def send_jobs():
+    authorization = request.headers.get('Authorization')
+    if authorization != os.getenv("SECRET_KEY"):
+        return '', 401
+    get_jobs_and_send()
+    return '', 204
