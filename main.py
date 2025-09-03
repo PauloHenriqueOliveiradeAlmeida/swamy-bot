@@ -39,9 +39,9 @@ Link de candidatura: {job['link']}
 
     print("Vagas enviadas")
 
-router = Flask(__name__)
+app = Flask(__name__)
 
-@router.route('/send-jobs', methods=['HEAD'])
+@app.route('/send-jobs', methods=['HEAD'])
 def send_jobs():
     authorization = request.headers.get('Authorization')
     if authorization != os.getenv("SECRET_KEY"):
