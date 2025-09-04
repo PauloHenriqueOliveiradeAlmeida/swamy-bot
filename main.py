@@ -41,7 +41,7 @@ Link de candidatura: {job['link']}
 
 app = Flask(__name__)
 
-@app.route('/send-jobs', methods=['GET'])
+@app.route('/send-jobs', methods=['HEAD'])
 def send_jobs():
     authorization = request.headers.get('Authorization')
     if authorization != os.getenv("SECRET_KEY"):
