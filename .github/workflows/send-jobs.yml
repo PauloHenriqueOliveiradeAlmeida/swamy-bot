@@ -11,6 +11,6 @@ jobs:
     steps:
       - name: Call endpoint /send-jobs
         run: |
-          curl -I "${{ secrets.API_BASE_URL }}/send-jobs" \
+          curl -X GET "${{ secrets.API_BASE_URL }}/send-jobs" \
             -H "Authorization: Bearer ${{ secrets.API_SECRET }}" \
             -H "Content-Type: application/json"
