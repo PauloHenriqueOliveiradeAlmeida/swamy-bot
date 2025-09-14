@@ -19,6 +19,7 @@ PyScreeze==1.0.1
 python-dotenv==1.1.1
 python3-xlib==0.15
 pytweening==1.2.0
+redis==6.4.0
 requests==2.32.5
 schedule==1.2.2
 soupsieve==2.7
