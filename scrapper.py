@@ -6,7 +6,7 @@ HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36'
 }
 
-def find_linkedin_jobs():
+def find_linkedin_jobs() -> list[dict[str, str]]:
     try:
         response = requests.get(URL, headers=HEADERS)
         response.raise_for_status()
