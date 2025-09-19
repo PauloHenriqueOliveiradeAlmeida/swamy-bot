@@ -9,6 +9,7 @@ class Db:
         self.REDIS_PORT = os.getenv("REDIS_PORT") or 6379
         self.REDIS_USER = os.getenv("REDIS_USER") or "redis"
         self.REDIS_PASSWORD = os.getenv("REDIS_PASSWORD") or "redis"
+        self.REDIS_USE_SSL = os.getenv("REDIS_USE_SSL") or True
         self.db = self._create_connection() 
 
     def connect(self):
@@ -63,6 +64,6 @@ class Db:
                 username=self.REDIS_USER,
                 password=self.REDIS_PASSWORD,
                 decode_responses=True,
-                ssl=True,
+                ssl=True if self.REDIS_USE_SSL == "true" else False,
                 ssl_cert_reqs="none"
         )
