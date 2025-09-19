@@ -7,14 +7,16 @@ class Db:
     def __init__(self):
         self.REDIS_HOST = os.getenv("REDIS_HOST") or "localhost"
         self.REDIS_PORT = os.getenv("REDIS_PORT") or 6379
-        self.db = Redis(host=self.REDIS_HOST, port=int(self.REDIS_PORT))
+        self.REDIS_USER = os.getenv("REDIS_USER") or "redis"
+        self.REDIS_PASSWORD = os.getenv("REDIS_PASSWORD") or "redis"
+        self.db = self._create_connection() 
 
     def connect(self):
         if not self.db:
-            self.db = Redis(host=self.REDIS_HOST, port=int(self.REDIS_PORT))
+            self.db = self._create_connection()
             return self.db
         if not self.db.ping():
-            self.db = Redis(host=self.REDIS_HOST, port=int(self.REDIS_PORT))
+            self.db = self._create_connection()
 
         return self.db
 
@@ -31,7 +33,7 @@ class Db:
             return
         data = self.db.get(key)
         self.close()
-        return cast(dict[str, str], data)    
+        return cast(dict[str, str], data) 
     def set(self, key, value) -> None:
         self.connect()
         if not self.db:
@@ -45,7 +47,7 @@ class Db:
             return []
         data = self.db.mget(keys)
         self.close()
-        return [item.decode() for item in cast(list[bytes], data) if item is not None]
+        return cast(list[str], data)
 
     def set_many(self, data: dict[str, str]) -> None:
         self.connect()
@@ -53,3 +55,14 @@ class Db:
             return
         self.db.mset(data)
         self.close()
+
+    def _create_connection(self) -> Redis:
+        return Redis(
+                host=self.REDIS_HOST,
+                port=int(self.REDIS_PORT),
+                username=self.REDIS_USER,
+                password=self.REDIS_PASSWORD,
+                decode_responses=True,
+                ssl=True,
+                ssl_cert_reqs="none"
+        )
